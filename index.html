@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Devlog-UI Demo</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background: #f5f5f5;
+      }
+      h1 {
+        color: #333;
+        margin-bottom: 8px;
+      }
+      .subtitle {
+        color: #666;
+        margin-bottom: 32px;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      button {
+        padding: 10px 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.15s ease;
+      }
+      .btn-debug {
+        background: #6e6e6e;
+        color: white;
+      }
+      .btn-info {
+        background: #3794ff;
+        color: white;
+      }
+      .btn-warn {
+        background: #cca700;
+        color: white;
+      }
+      .btn-error {
+        background: #f14c4c;
+        color: white;
+      }
+      .btn-action {
+        background: #0e639c;
+        color: white;
+      }
+      .btn-success {
+        background: #4caf50;
+        color: white;
+      }
+      .btn-purple {
+        background: #9c27b0;
+        color: white;
+      }
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+      .section {
+        background: white;
+        padding: 24px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 8px;
+        color: #333;
+      }
+      .section-desc {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+      code {
+        background: #e8e8e8;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 13px;
+      }
+      .hint {
+        background: #e7f3ff;
+        border-left: 4px solid #3794ff;
+        padding: 12px 16px;
+        border-radius: 0 4px 4px 0;
+        margin-top: 24px;
+      }
+      #timeline-container {
+        width: 100%;
+        height: 150px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-top: 12px;
+        overflow: hidden;
+      }
+      #timeline-container canvas {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+      }
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Devlog-UI Demo</h1>
+    <p class="subtitle">
+      Feature-rich browser dev-logger with UI overlay and pop-out window
+    </p>
+
+    <div class="feature-grid">
+      <!-- Basic Logging -->
+      <div class="section">
+        <h2>Basic Logging</h2>
+        <p class="section-desc">Log messages with automatic source tracking</p>
+        <div class="controls">
+          <button class="btn-debug" onclick="logDebug()">Debug</button>
+          <button class="btn-info" onclick="logInfo()">Info</button>
+          <button class="btn-warn" onclick="logWarn()">Warning</button>
+          <button class="btn-error" onclick="logError()">Error</button>
+        </div>
+      </div>
+
+      <!-- Log with Data -->
+      <div class="section">
+        <h2>Structured Data</h2>
+        <p class="section-desc">Attach objects, arrays, and errors to logs</p>
+        <div class="controls">
+          <button class="btn-info" onclick="logWithObject()">Object</button>
+          <button class="btn-info" onclick="logWithArray()">Array</button>
+          <button class="btn-error" onclick="logWithError()">Error</button>
+          <button class="btn-warn" onclick="logWithCircular()">Circular</button>
+        </div>
+      </div>
+
+      <!-- Spans -->
+      <div class="section">
+        <h2>Spans (Grouping)</h2>
+        <p class="section-desc">Group related logs with timing</p>
+        <div class="controls">
+          <button class="btn-success" onclick="simpleSpan()">
+            Simple Span
+          </button>
+          <button class="btn-success" onclick="nestedSpans()">
+            Nested Spans
+          </button>
+          <button class="btn-error" onclick="failedSpan()">Failed Span</button>
+        </div>
+      </div>
+
+      <!-- Context -->
+      <div class="section">
+        <h2>Context & Tags</h2>
+        <p class="section-desc">Attach context for correlation</p>
+        <div class="controls">
+          <button class="btn-purple" onclick="globalContext()">
+            Global Context
+          </button>
+          <button class="btn-purple" onclick="boundLogger()">
+            Bound Logger
+          </button>
+          <button class="btn-warn" onclick="clearContext()">
+            Clear Context
+          </button>
+        </div>
+      </div>
+
+      <!-- Diff -->
+      <div class="section">
+        <h2>Visual Diff</h2>
+        <p class="section-desc">Compare objects with change visualization</p>
+        <div class="controls">
+          <button class="btn-info" onclick="simpleDiff()">Simple Diff</button>
+          <button class="btn-warn" onclick="complexDiff()">Complex Diff</button>
+          <button class="btn-info" onclick="noDiff()">No Changes</button>
+        </div>
+      </div>
+
+      <!-- Network -->
+      <div class="section">
+        <h2>Network Capture</h2>
+        <p class="section-desc">Auto-track Fetch/XHR requests</p>
+        <div class="controls">
+          <button class="btn-info" onclick="fetchRequest()">
+            Fetch Request
+          </button>
+          <button class="btn-error" onclick="failedRequest()">
+            Failed Request
+          </button>
+          <button class="btn-action" onclick="toggleNetwork()">
+            Toggle Capture
+          </button>
+        </div>
+      </div>
+
+      <!-- Export -->
+      <div class="section">
+        <h2>Export Logs</h2>
+        <p class="section-desc">Export as JSON or text for bug reports</p>
+        <div class="controls">
+          <button class="btn-action" onclick="exportJSON()">Export JSON</button>
+          <button class="btn-action" onclick="exportText()">Export Text</button>
+          <button class="btn-action" onclick="copyLogs()">
+            Copy to Clipboard
+          </button>
+        </div>
+      </div>
+
+      <!-- UI Controls -->
+      <div class="section">
+        <h2>UI Controls</h2>
+        <p class="section-desc">Control the overlay panel</p>
+        <div class="controls">
+          <button class="btn-action" onclick="DevLoggerUI.toggle()">
+            Toggle Panel
+          </button>
+          <button class="btn-action" onclick="DevLoggerUI.popout()">
+            Pop-out Window
+          </button>
+          <button class="btn-warn" onclick="logger.clear()">Clear Logs</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline Section (full width) -->
+    <div class="section">
+      <h2>Timeline View</h2>
+      <p class="section-desc">
+        Canvas-based visualization of logs and spans over time
+      </p>
+      <div class="controls">
+        <button class="btn-action" onclick="createTimelineDemo()">
+          Create Timeline
+        </button>
+        <button class="btn-info" onclick="timelineActivity()">
+          Generate Activity
+        </button>
+        <button class="btn-warn" onclick="destroyTimeline()">
+          Destroy Timeline
+        </button>
+      </div>
+      <div id="timeline-container"></div>
+    </div>
+
+    <!-- Error Capture Section -->
+    <div class="section">
+      <h2>Error Capture</h2>
+      <p class="section-desc">
+        Automatically capture uncaught errors and unhandled rejections
+      </p>
+      <div class="controls">
+        <button class="btn-error" onclick="throwUncaught()">
+          Uncaught Error
+        </button>
+        <button class="btn-error" onclick="unhandledRejection()">
+          Unhandled Rejection
+        </button>
+      </div>
+    </div>
+
+    <!-- Stress Test Section -->
+    <div class="section">
+      <h2>Stress Test</h2>
+      <p class="section-desc">Test performance with many logs</p>
+      <div class="controls">
+        <button class="btn-warn" onclick="stressTest(100)">100 Logs</button>
+        <button class="btn-warn" onclick="stressTest(500)">500 Logs</button>
+        <button class="btn-error" onclick="stressTest(1000)">1000 Logs</button>
+      </div>
+    </div>
+
+    <div class="hint">
+      <strong>Tip:</strong> Press <code>Ctrl+Shift+L</code> to toggle the
+      Devlog-UI panel, or click the floating button in the bottom-right corner.
+    </div>
+
+    <script type="module">
+      import {
+        logger,
+        DevLoggerUI,
+        ErrorCapture,
+        LogPersistence,
+        NetworkCapture,
+        createTimeline,
+        computeDiff,
+        createDiffResult,
+      } from "devlog-ui";
+
+      // Make available globally for onclick handlers
+      window.logger = logger;
+      window.DevLoggerUI = DevLoggerUI;
+
+      // Enable persistence and error capture
+      LogPersistence.enable();
+      ErrorCapture.install();
+      NetworkCapture.install({
+        ignorePatterns: ["/analytics", /\.hot-update\./, /sockjs/],
+      });
+
+      // Rehydrate logs from previous session
+      const restored = LogPersistence.rehydrate();
+      if (LogPersistence.hadCrash()) {
+        logger.warn(`Recovered ${restored} logs from previous crash`);
+      }
+
+      // Initialize UI
+      DevLoggerUI.init();
+
+      // Log some initial messages
+      logger.info("Devlog-UI initialized");
+      logger.debug("Demo page loaded", { timestamp: new Date().toISOString() });
+
+      // ========== Basic Logging ==========
+      window.logDebug = () => logger.debug("This is a debug message");
+      window.logInfo = () => logger.info("This is an info message");
+      window.logWarn = () => logger.warn("This is a warning message");
+      window.logError = () => logger.error("This is an error message");
+
+      // ========== Structured Data ==========
+      window.logWithObject = () =>
+        logger.info("User data", {
+          id: 123,
+          name: "John Doe",
+          roles: ["admin", "user"],
+          settings: { theme: "dark", notifications: true },
+        });
+
+      window.logWithArray = () =>
+        logger.info("Items list", [
+          { id: 1, name: "Item 1", price: 9.99 },
+          { id: 2, name: "Item 2", price: 19.99 },
+          { id: 3, name: "Item 3", price: 29.99 },
+        ]);
+
+      window.logWithError = () => {
+        try {
+          throw new Error("Something went wrong!");
+        } catch (e) {
+          logger.error("Caught an exception", e);
+        }
+      };
+
+      window.logWithCircular = () => {
+        const obj = { name: "circular", children: [] };
+        obj.self = obj;
+        obj.children.push(obj);
+        logger.warn("Circular reference handled safely", obj);
+      };
+
+      // ========== Spans ==========
+      window.simpleSpan = async () => {
+        const span = logger.span("Load user profile");
+        span.info("Fetching user data...");
+        await sleep(500);
+        span.info("User data received", { userId: 123, name: "John" });
+        span.end();
+      };
+
+      window.nestedSpans = async () => {
+        const requestSpan = logger.span("HTTP Request", {
+          requestId: "abc-123",
+        });
+        requestSpan.info("Starting request...");
+
+        const fetchSpan = requestSpan.span("Fetch Data");
+        fetchSpan.debug("Connecting to API...");
+        await sleep(300);
+        fetchSpan.info("Data received");
+        fetchSpan.end();
+
+        const processSpan = requestSpan.span("Process Data");
+        processSpan.debug("Parsing response...");
+        await sleep(200);
+        processSpan.info("Processing complete");
+        processSpan.end();
+
+        requestSpan.info("Request completed successfully");
+        requestSpan.end();
+      };
+
+      window.failedSpan = async () => {
+        const span = logger.span("Database query");
+        span.info("Connecting to database...");
+        await sleep(400);
+        span.error("Connection timeout");
+        span.fail(new Error("Database connection failed"));
+      };
+
+      // ========== Context ==========
+      window.globalContext = () => {
+        logger.setGlobalContext({
+          env: "development",
+          version: "1.0.0",
+          userId: "user-" + Math.random().toString(36).substr(2, 9),
+        });
+        logger.info("Global context set - all logs now include this context");
+      };
+
+      window.boundLogger = () => {
+        const reqLogger = logger.withContext({
+          requestId: "req-" + Date.now(),
+        });
+        reqLogger.info("Request started");
+        reqLogger.debug("Processing request...");
+
+        const userLogger = reqLogger.withContext({ userId: "user-456" });
+        userLogger.info("User action performed");
+        userLogger.warn("Rate limit approaching");
+      };
+
+      window.clearContext = () => {
+        logger.clearGlobalContext();
+        logger.info("Global context cleared");
+      };
+
+      // ========== Diff ==========
+      window.simpleDiff = () => {
+        const oldConfig = { theme: "light", fontSize: 14 };
+        const newConfig = { theme: "dark", fontSize: 14, language: "en" };
+        logger.diff("Config updated", oldConfig, newConfig);
+      };
+
+      window.complexDiff = () => {
+        const oldUser = {
+          id: 1,
+          name: "John Doe",
+          email: "john@old.com",
+          settings: { theme: "light", notifications: true },
+          roles: ["user"],
+        };
+        const newUser = {
+          id: 1,
+          name: "John Smith",
+          email: "john@new.com",
+          settings: { theme: "dark", notifications: false, beta: true },
+          roles: ["user", "admin"],
+        };
+        logger.diff("User profile changed", oldUser, newUser, "warn");
+      };
+
+      window.noDiff = () => {
+        const obj = { a: 1, b: 2, c: { d: 3 } };
+        logger.diff("No changes detected", obj, obj);
+      };
+
+      // ========== Network ==========
+      let networkEnabled = true;
+
+      window.fetchRequest = async () => {
+        try {
+          const response = await fetch(
+            "https://jsonplaceholder.typicode.com/todos/1"
+          );
+          const data = await response.json();
+          logger.info("Fetch successful", data);
+        } catch (e) {
+          logger.error("Fetch failed", e);
+        }
+      };
+
+      window.failedRequest = async () => {
+        try {
+          await fetch("https://invalid-domain-that-does-not-exist.com/api");
+        } catch (e) {
+          logger.error("Request failed as expected", e);
+        }
+      };
+
+      window.toggleNetwork = () => {
+        if (networkEnabled) {
+          NetworkCapture.uninstall();
+          logger.info("Network capture disabled");
+        } else {
+          NetworkCapture.install();
+          logger.info("Network capture enabled");
+        }
+        networkEnabled = !networkEnabled;
+      };
+
+      // ========== Export ==========
+      window.exportJSON = () => {
+        const json = logger.exportLogs({ format: "json", pretty: true });
+        console.log("Exported JSON:", json);
+        logger.info("Logs exported to console as JSON");
+      };
+
+      window.exportText = () => {
+        const text = logger.exportLogs({ format: "text" });
+        console.log("Exported Text:\n", text);
+        logger.info("Logs exported to console as text");
+      };
+
+      window.copyLogs = async () => {
+        const success = await logger.copyLogs({ format: "json" });
+        if (success) {
+          logger.info("Logs copied to clipboard!");
+        } else {
+          logger.error("Failed to copy logs to clipboard");
+        }
+      };
+
+      // ========== Timeline ==========
+      let timeline = null;
+
+      window.createTimelineDemo = () => {
+        if (timeline) {
+          timeline.destroy();
+        }
+        timeline = createTimeline({
+          container: "#timeline-container",
+          timeWindow: 30000,
+          showSpans: true,
+          showLogs: true,
+        });
+        logger.info("Timeline created");
+      };
+
+      window.timelineActivity = async () => {
+        const span = logger.span("Timeline activity");
+        for (let i = 0; i < 5; i++) {
+          await sleep(200);
+          logger.info(`Activity log ${i + 1}`);
+        }
+        span.end();
+      };
+
+      window.destroyTimeline = () => {
+        if (timeline) {
+          timeline.destroy();
+          timeline = null;
+          logger.info("Timeline destroyed");
+        }
+      };
+
+      // ========== Error Capture ==========
+      window.throwUncaught = () => {
+        setTimeout(() => {
+          throw new Error("This is an uncaught error!");
+        }, 0);
+      };
+
+      window.unhandledRejection = () => {
+        Promise.reject(new Error("This is an unhandled rejection!"));
+      };
+
+      // ========== Stress Test ==========
+      window.stressTest = (count) => {
+        logger.info(`Starting stress test with ${count} logs`);
+        const start = performance.now();
+        for (let i = 0; i < count; i++) {
+          const level = ["debug", "info", "warn", "error"][i % 4];
+          logger[level](`Stress test log #${i + 1}`, {
+            index: i,
+            timestamp: Date.now(),
+          });
+        }
+        const duration = performance.now() - start;
+        logger.info(
+          `Stress test completed in ${duration.toFixed(2)}ms (${(
+            (count / duration) *
+            1000
+          ).toFixed(0)} logs/sec)`
+        );
+      };
+
+      // ========== Helpers ==========
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      console.log(
+        "Devlog-UI demo ready! Try Ctrl+Shift+L to toggle the panel."
+      );
+    </script>
+  </body>
+</html>
