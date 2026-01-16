@@ -305,6 +305,9 @@
         createDiffResult,
       } from "devlog-ui";
 
+      // Enable logger (disabled by default in production builds)
+      logger.configure({ enabled: true });
+
       // Make available globally for onclick handlers
       window.logger = logger;
       window.DevLoggerUI = DevLoggerUI;
