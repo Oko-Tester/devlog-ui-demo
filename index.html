@@ -104,7 +104,7 @@
       }
       #timeline-container {
         width: 100%;
-        height: 150px;
+        height: 238px;
         border: 1px solid #ddd;
         border-radius: 4px;
         margin-top: 12px;
@@ -129,103 +129,6 @@
     </p>
 
     <div class="feature-grid">
-      <!-- Basic Logging -->
-      <div class="section">
-        <h2>Basic Logging</h2>
-        <p class="section-desc">Log messages with automatic source tracking</p>
-        <div class="controls">
-          <button class="btn-debug" onclick="logDebug()">Debug</button>
-          <button class="btn-info" onclick="logInfo()">Info</button>
-          <button class="btn-warn" onclick="logWarn()">Warning</button>
-          <button class="btn-error" onclick="logError()">Error</button>
-        </div>
-      </div>
-
-      <!-- Log with Data -->
-      <div class="section">
-        <h2>Structured Data</h2>
-        <p class="section-desc">Attach objects, arrays, and errors to logs</p>
-        <div class="controls">
-          <button class="btn-info" onclick="logWithObject()">Object</button>
-          <button class="btn-info" onclick="logWithArray()">Array</button>
-          <button class="btn-error" onclick="logWithError()">Error</button>
-          <button class="btn-warn" onclick="logWithCircular()">Circular</button>
-        </div>
-      </div>
-
-      <!-- Spans -->
-      <div class="section">
-        <h2>Spans (Grouping)</h2>
-        <p class="section-desc">Group related logs with timing</p>
-        <div class="controls">
-          <button class="btn-success" onclick="simpleSpan()">
-            Simple Span
-          </button>
-          <button class="btn-success" onclick="nestedSpans()">
-            Nested Spans
-          </button>
-          <button class="btn-error" onclick="failedSpan()">Failed Span</button>
-        </div>
-      </div>
-
-      <!-- Context -->
-      <div class="section">
-        <h2>Context & Tags</h2>
-        <p class="section-desc">Attach context for correlation</p>
-        <div class="controls">
-          <button class="btn-purple" onclick="globalContext()">
-            Global Context
-          </button>
-          <button class="btn-purple" onclick="boundLogger()">
-            Bound Logger
-          </button>
-          <button class="btn-warn" onclick="clearContext()">
-            Clear Context
-          </button>
-        </div>
-      </div>
-
-      <!-- Diff -->
-      <div class="section">
-        <h2>Visual Diff</h2>
-        <p class="section-desc">Compare objects with change visualization</p>
-        <div class="controls">
-          <button class="btn-info" onclick="simpleDiff()">Simple Diff</button>
-          <button class="btn-warn" onclick="complexDiff()">Complex Diff</button>
-          <button class="btn-info" onclick="noDiff()">No Changes</button>
-        </div>
-      </div>
-
-      <!-- Network -->
-      <div class="section">
-        <h2>Network Capture</h2>
-        <p class="section-desc">Auto-track Fetch/XHR requests</p>
-        <div class="controls">
-          <button class="btn-info" onclick="fetchRequest()">
-            Fetch Request
-          </button>
-          <button class="btn-error" onclick="failedRequest()">
-            Failed Request
-          </button>
-          <button class="btn-action" onclick="toggleNetwork()">
-            Toggle Capture
-          </button>
-        </div>
-      </div>
-
-      <!-- Export -->
-      <div class="section">
-        <h2>Export Logs</h2>
-        <p class="section-desc">Export as JSON or text for bug reports</p>
-        <div class="controls">
-          <button class="btn-action" onclick="exportJSON()">Export JSON</button>
-          <button class="btn-action" onclick="exportText()">Export Text</button>
-          <button class="btn-action" onclick="copyLogs()">
-            Copy to Clipboard
-          </button>
-        </div>
-      </div>
-
       <!-- UI Controls -->
       <div class="section">
         <h2>UI Controls</h2>
@@ -239,6 +142,95 @@
           </button>
           <button class="btn-warn" onclick="logger.clear()">Clear Logs</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Basic Logging -->
+    <div class="section">
+      <h2>Basic Logging</h2>
+      <p class="section-desc">Log messages with automatic source tracking</p>
+      <div class="controls">
+        <button class="btn-debug" onclick="logDebug()">Debug</button>
+        <button class="btn-info" onclick="logInfo()">Info</button>
+        <button class="btn-warn" onclick="logWarn()">Warning</button>
+        <button class="btn-error" onclick="logError()">Error</button>
+      </div>
+    </div>
+
+    <!-- Log with Data -->
+    <div class="section">
+      <h2>Structured Data</h2>
+      <p class="section-desc">Attach objects, arrays, and errors to logs</p>
+      <div class="controls">
+        <button class="btn-info" onclick="logWithObject()">Object</button>
+        <button class="btn-info" onclick="logWithArray()">Array</button>
+        <button class="btn-error" onclick="logWithError()">Error</button>
+        <button class="btn-warn" onclick="logWithCircular()">Circular</button>
+      </div>
+    </div>
+
+    <!-- Spans -->
+    <div class="section">
+      <h2>Spans (Grouping)</h2>
+      <p class="section-desc">Group related logs with timing</p>
+      <div class="controls">
+        <button class="btn-success" onclick="simpleSpan()">Simple Span</button>
+        <button class="btn-success" onclick="nestedSpans()">
+          Nested Spans
+        </button>
+        <button class="btn-error" onclick="failedSpan()">Failed Span</button>
+      </div>
+    </div>
+
+    <!-- Context -->
+    <div class="section">
+      <h2>Context & Tags</h2>
+      <p class="section-desc">Attach context for correlation</p>
+      <div class="controls">
+        <button class="btn-purple" onclick="globalContext()">
+          Global Context
+        </button>
+        <button class="btn-purple" onclick="boundLogger()">Bound Logger</button>
+        <button class="btn-warn" onclick="clearContext()">Clear Context</button>
+      </div>
+    </div>
+
+    <!-- Diff -->
+    <div class="section">
+      <h2>Visual Diff</h2>
+      <p class="section-desc">Compare objects with change visualization</p>
+      <div class="controls">
+        <button class="btn-info" onclick="simpleDiff()">Simple Diff</button>
+        <button class="btn-warn" onclick="complexDiff()">Complex Diff</button>
+        <button class="btn-info" onclick="noDiff()">No Changes</button>
+      </div>
+    </div>
+
+    <!-- Network -->
+    <div class="section">
+      <h2>Network Capture</h2>
+      <p class="section-desc">Auto-track Fetch/XHR requests</p>
+      <div class="controls">
+        <button class="btn-info" onclick="fetchRequest()">Fetch Request</button>
+        <button class="btn-error" onclick="failedRequest()">
+          Failed Request
+        </button>
+        <button class="btn-action" onclick="toggleNetwork()">
+          Toggle Capture
+        </button>
+      </div>
+    </div>
+
+    <!-- Export -->
+    <div class="section">
+      <h2>Export Logs</h2>
+      <p class="section-desc">Export as JSON or text for bug reports</p>
+      <div class="controls">
+        <button class="btn-action" onclick="exportJSON()">Export JSON</button>
+        <button class="btn-action" onclick="exportText()">Export Text</button>
+        <button class="btn-action" onclick="copyLogs()">
+          Copy to Clipboard
+        </button>
       </div>
     </div>
 
