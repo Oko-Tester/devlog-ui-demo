@@ -299,7 +299,12 @@
       } from "devlog-ui";
 
       // Enable logger (disabled by default in production builds)
-      logger.configure({ enabled: true });
+      logger.configure({
+        enabled: true,
+        shortcutAction: "popout",
+        spanCollapsed: false,
+        showToggleButton: true,
+      });
 
       // Make available globally for onclick handlers
       window.logger = logger;
